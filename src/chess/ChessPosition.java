@@ -8,9 +8,8 @@ public class ChessPosition {
 	private int row;
 	
 	public ChessPosition(char column, int row) {
-		if (column < 'A' || column > 'H' || row < 1 || row > 8) {
+		if (column < 'A' || column > 'H' || row < 1 || row > 8)
 			throw new ChessException("Error: Invalid Value. Valid Value's is only from A1 to H8.");
-		}
 		this.column = column;
 		this.row = row;
 	}
