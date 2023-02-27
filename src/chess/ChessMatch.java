@@ -25,6 +25,14 @@ public class ChessMatch {
 		return mat;
 	}
 	
+	//metodo para poder retornar as posiçoes possiveis
+	//na posicao de origem e imprimir em Program
+	public boolean[][] possibleMoves(ChessPosition sourcePosition) {
+		Position position = sourcePosition.toPosition();
+		validateSourcePosition(position);
+		return board.piece(position).possibleMoves();
+	}
+	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
 		Position source = sourcePosition.toPosition();
 		Position target = targetPosition.toPosition();
@@ -45,7 +53,7 @@ public class ChessMatch {
 		if (!board.thereIsAPiece(position)) {
 			throw new ChessException("There is no piece on the designated position.");
 		}
-		if(board.piece(position).isThereAnyPossibleMove()) {
+		if(!board.piece(position).isThereAnyPossibleMove()) {
 			throw new ChessException("Theres is no possible moves");
 		}
 	}
