@@ -87,7 +87,7 @@ public class ChessMatch {
 		validateTargetPosition(source, target);
 		Piece capturedPiece = makeMove(source, target);
 		
-		if (testCheck(currentPlayer)) {
+		if (testCheck(currentPlayer) || testIllegalCastling(source, target)) {
 			undoMove(source, target, capturedPiece);
 			throw new ChessException("You can't put yourself in check");
 		}
@@ -240,6 +240,34 @@ public class ChessMatch {
 				board.placePiece(pawn, pawnPosition);
 			}
 		}
+	}
+	
+	private boolean testIllegalCastling(Position source, Position target) {
+		
+		ChessPiece movedPiece = (ChessPiece)board.piece(target);
+		
+		boolean isIllegal = false;
+		
+		// position in-between
+		Position inbet = new Position(source.getRow(), 
+				(source.getColumn()>target.getColumn()) ? source.getColumn() - 1 : target.getColumn() - 1);
+		
+		// identifies if a king has moved
+		if (movedPiece instanceof King) {
+			// indentifies if a king has castled, once it moved two squares away
+			if (Math.abs(source.getColumn() - target.getColumn()) == 2) {
+				// checks if the position passed through by the king is attacked
+				Piece capturedPiece = makeMove(target, inbet);
+				
+				if (testCheck(currentPlayer)) {
+					isIllegal = true;
+				} 
+				
+				
+				undoMove(target, inbet, capturedPiece);
+			}
+		}
+		return isIllegal;
 	}
 	
 	private void validateSourcePosition(Position position) {
